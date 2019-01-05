@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AzureDevOpsCustomObjects
+namespace AzureDevOpsCustomObjects.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class AzureDevOpsPathAttribute : Attribute

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Reflection;
+using AzureDevOpsCustomObjects.Attributes;
+using AzureDevOpsCustomObjects.Enumerations;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 
-namespace AzureDevOpsCustomObjects
+namespace AzureDevOpsCustomObjects.WorkItems
 {
-    public class AzureDevOpsWorkItem
+    public abstract class AzureDevOpsWorkItem
     {
         private readonly JsonPatchDocument _jsonPatchDocument;
 
@@ -14,9 +16,9 @@ namespace AzureDevOpsCustomObjects
             _jsonPatchDocument = new JsonPatchDocument();
         }
 
-        public AzureDevOpsWorkItemType AzureDevOpsWorkItemType { get; set; }
+        public AzureDevOpsWorkItemType DevOpsWorkItemType { get; set; }
 
-        public string WorkItemType => AzureDevOpsWorkItemType.GetDescription();
+        public string WorkItemType => DevOpsWorkItemType.GetDescription();
 
         [AzureDevOpsPath("/fields/System.Title")]
         public string Title { get; set; }
@@ -59,7 +61,7 @@ namespace AzureDevOpsCustomObjects
 
                 if (workItemPropertyInfo?.PropertyType.IsEnum == true)
                 {
-                    var enumValue = workItemPropertyInfo?.GetValue(this, null) as Enum;
+                    var enumValue = workItemPropertyInfo.GetValue(this, null) as Enum;
                     value = enumValue.GetDescription();
                 }
 

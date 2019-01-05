@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace AzureDevOpsCustomObjects
+namespace AzureDevOpsCustomObjects.Enumerations
 {
     public static class EnumExtension
     {

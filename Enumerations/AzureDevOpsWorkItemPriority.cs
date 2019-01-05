@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AzureDevOpsCustomObjects
+namespace AzureDevOpsCustomObjects.Enumerations
 {
     public enum AzureDevOpsWorkItemPriority
     {

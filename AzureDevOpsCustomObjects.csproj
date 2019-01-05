@@ -83,14 +83,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WorkItems\AzureDevOpsBacklogItem.cs" />
+    <Compile Include="WorkItems\AzureDevOpsProductBacklogItem.cs" />
     <Compile Include="WorkItems\AzureDevOpsBug.cs" />
     <Compile Include="Attributes\AzureDevOpsPathAttribute.cs" />
     <Compile Include="WorkItems\AzureDevOpsWorkItem.cs" />
     <Compile Include="Enumerations\AzureDevOpsWorkItemPriority.cs" />
     <Compile Include="Enumerations\AzureDevOpsWorkItemSeverity.cs" />
     <Compile Include="Enumerations\AzureDevOpsWorkItemType.cs" />
-    <Compile Include="Enumerations\EnumExtension.cs" />
+    <Compile Include="Attributes\ReflectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkItemCreator.cs" />
   </ItemGroup>

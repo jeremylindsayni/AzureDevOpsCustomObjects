@@ -1,9 +1,8 @@
-﻿using System;
-using System.Reflection;
-using AzureDevOpsCustomObjects.Attributes;
+﻿using AzureDevOpsCustomObjects.Attributes;
 using AzureDevOpsCustomObjects.Enumerations;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
+using System.Linq;
 
 namespace AzureDevOpsCustomObjects.WorkItems
 {
@@ -38,6 +37,24 @@ namespace AzureDevOpsCustomObjects.WorkItems
         [AzureDevOpsPath("/fields/System.AssignedTo")]
         public string AssignedTo { get; set; }
 
+        [AzureDevOpsPath("/fields/System.History")]
+        public string Comment { get; set; }
+
+        [AzureDevOpsPath("/fields/Microsoft.VSTS.Common.Activity")]
+        public string Activity { get; set; }
+
+        [AzureDevOpsPath("/fields/Microsoft.VSTS.Common.AcceptanceCriteria")]
+        public string AcceptanceCriteria { get; set; }
+
+        [AzureDevOpsPath("/fields/Microsoft.VSTS.TCM.SystemInfo")]
+        public string SystemInformation { get; set; }
+
+        [AzureDevOpsPath("/fields/System.Tags")]
+        public string Tag { get; set; }
+
+        [AzureDevOpsPath("/fields/Microsoft.VSTS.Scheduling.Effort")]
+        public int Effort { get; set; }
+
         public void Add(JsonPatchOperation pathOperation)
         {
             _jsonPatchDocument.Add(pathOperation);
@@ -45,39 +62,22 @@ namespace AzureDevOpsCustomObjects.WorkItems
 
         public JsonPatchDocument ToJsonPatchDocument()
         {
-            var patchDocument = _jsonPatchDocument;
+            _jsonPatchDocument.AddRange(
+                from property in typeof(AzureDevOpsWorkItem).GetProperties()
+                let attributePath = property.GetFieldPath()
+                where attributePath != null
 
-            var properties = typeof(AzureDevOpsWorkItem).GetProperties();
+                let propertyValue = property.GetPropertyValue(this)
+                where propertyValue != null
 
-            foreach (var property in properties)
-            {
-                var attribute = property.GetCustomAttribute<AzureDevOpsPathAttribute>();
-
-                if (attribute == null) continue;
-
-                var workItemPropertyInfo = typeof(AzureDevOpsWorkItem).GetProperty(property.Name);
-
-                var value = workItemPropertyInfo?.GetValue(this, null);
-
-                if (workItemPropertyInfo?.PropertyType.IsEnum == true)
+                select new JsonPatchOperation
                 {
-                    var enumValue = workItemPropertyInfo.GetValue(this, null) as Enum;
-                    value = enumValue.GetDescription();
-                }
+                    Operation = Operation.Add,
+                    Path = attributePath,
+                    Value = propertyValue
+                });
 
-                if (value == null) continue;
-
-                patchDocument.Add(
-                    new JsonPatchOperation
-                    {
-                        Operation = Operation.Add,
-                        Path = attribute.Path,
-                        Value = value
-                    }
-                );
-            }
-
-            return patchDocument;
+            return _jsonPatchDocument;
         }
     }
 }

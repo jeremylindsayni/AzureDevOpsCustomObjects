@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>AzureDevOpsBoardsCustomWorkItemObjects</id>
+    <version>0.0.1-alpha</version>
+    <title>Azure DevOps - Custom WorkItem objects for Boards</title>
+    <authors>Jeremy Lindsay (@jeremylindsayni)</authors>
+    <owners>Jeremy Lindsay (@jeremylindsayni)</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/jeremylindsayni/AzureDevOpsCustomObjects/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/jeremylindsayni/AzureDevOpsCustomObjects</projectUrl>
+    <description>Experimental package to assist with creation of work items in Azure DevOps boards using .NET.</description>
+    <summary>Experimental package to assist with creation of work items in Azure DevOps boards using .NET.</summary>
+    <copyright>Copyright 2019: Jeremy Lindsay. All rights reserved.</copyright>
+    <language>en-US</language>
+    <dependencies>
+      <group targetFramework=".NETFramework4.0">
+        <dependency id="Microsoft.TeamFoundationServer.Client" version="15.131.1" />
+        <dependency id="Microsoft.VisualStudio.Services.Client" version="15.131.1" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="lib\net40\AzureDevOpsCustomObjects.dll" target="lib\net40\AzureDevOpsCustomObjects.dll" />
+  </files>
+</package>

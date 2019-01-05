@@ -30,9 +30,15 @@ namespace ConsoleApp4
             {
                 Title = "Spelling mistake on the home page",
                 ReproSteps = "Log in, look at the home page - there is a spelling mistake.",
-                Priority = AzureDevOpsWorkItemPriority.Top,
-                Severity = AzureDevOpsWorkItemSeverity.High,
-                AssignedTo = "Jeremy Lindsay"
+                Priority = AzureDevOpsWorkItemPriority.Medium,
+                Severity = AzureDevOpsWorkItemSeverity.Low,
+                AssignedTo = "Jeremy Lindsay",
+                Comment = "First comment from me",
+                Activity = "Development",
+                AcceptanceCriteria = "This is the acceptance criteria",
+                SystemInformation = "This is the system information",
+                Effort = 13,
+                Tag = "Cosmetic; UI Only"
             };
 
             var createdBug = workItemCreator.Create(bug);
@@ -57,16 +63,21 @@ namespace ConsoleApp4
 
             var workItemCreator = new WorkItemCreator(uri, personalAccessToken, projectName);
 
-            var task = new AzureDevOpsTask
+            var productBacklogItem = new AzureDevOpsProductBacklogItem
             {
                 Title = "Add reports for how many users log in each day",
                 Description = "Need a new report with log in statistics.",
                 Priority = AzureDevOpsWorkItemPriority.Low,
                 Severity = AzureDevOpsWorkItemSeverity.Low,
-                AssignedTo = "Jeremy Lindsay"
+                AssignedTo = "Jeremy Lindsay",
+                Activity = "Development",
+                AcceptanceCriteria = "This is the acceptance criteria",
+                SystemInformation = "This is the system information",
+                Effort = 13,
+                Tag = "Reporting; Users"
             };
 
-            task.Add(
+            productBacklogItem.Add(
                 new JsonPatchOperation
                 {
                     Path = "/fields/System.History",
@@ -74,7 +85,7 @@ namespace ConsoleApp4
                 }
             );
 
-            var createdBacklogItem = workItemCreator.Create(task);
+            var createdBacklogItem = workItemCreator.Create(productBacklogItem);
         }
     }
 }

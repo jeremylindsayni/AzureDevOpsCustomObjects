@@ -5,6 +5,7 @@ namespace AzureDevOpsCustomObjects.Enumerations
     public enum AzureDevOpsWorkItemType
     {
         [Description("Bug")] Bug,
-        [Description("Product Backlog Item")] ProductBacklogItem
+        [Description("Product Backlog Item")] ProductBacklogItem,
+        [Description("Task")] Task
     }
 }

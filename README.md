@@ -1,6 +1,8 @@
 # Azure DevOps Custom Objects
 Experimental package to assist with creation of work items in Azure DevOps boards using .NET.
 
+This project targets the .NET Framework, not .NET Standard.
+
 ## Install the package from NuGet:
 
 Install-Package AzureDevOpsBoardsCustomWorkItemObjects -pre
@@ -12,7 +14,7 @@ The code below shows how to add a bug.
 ```csharp
 using AzureDevOpsCustomObjects;
 
-namespace ConsoleApp4
+namespace ConsoleApp
 {
     internal static class Program
     {
@@ -51,7 +53,7 @@ You can also add any missing fields, as shown in the code below which is an exam
 using AzureDevOpsCustomObjects;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 
-namespace ConsoleApp4
+namespace ConsoleApp
 {
     internal static class Program
     {

@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WorkItems\AzureDevOpsTask.cs" />
     <Compile Include="WorkItems\AzureDevOpsProductBacklogItem.cs" />
     <Compile Include="WorkItems\AzureDevOpsBug.cs" />
     <Compile Include="Attributes\AzureDevOpsPathAttribute.cs" />

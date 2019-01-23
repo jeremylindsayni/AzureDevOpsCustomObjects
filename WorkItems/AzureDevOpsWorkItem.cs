@@ -19,6 +19,9 @@ namespace AzureDevOpsCustomObjects.WorkItems
 
         public string WorkItemType => DevOpsWorkItemType.GetDescription();
 
+        [AzureDevOpsPath("/fields/System.Id")]
+        public int Id { get; set; }
+
         [AzureDevOpsPath("/fields/System.Title")]
         public string Title { get; set; }
 

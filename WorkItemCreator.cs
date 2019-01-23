@@ -22,7 +22,7 @@ namespace AzureDevOpsCustomObjects
 
         private string PersonalAccessToken { get; }
 
-        public WorkItem Create<T>(T bug) where T : AzureDevOpsWorkItem
+        public WorkItem Create<T>(T workItem) where T : AzureDevOpsWorkItem
         {
             var credentials = new VssBasicCredential(string.Empty, PersonalAccessToken);
 
@@ -30,7 +30,18 @@ namespace AzureDevOpsCustomObjects
             var workItemTrackingHttpClient = connection.GetClient<WorkItemTrackingHttpClient>();
 
             return workItemTrackingHttpClient
-                .CreateWorkItemAsync(bug.ToJsonPatchDocument(), ProjectName, bug.WorkItemType).Result;
+                .CreateWorkItemAsync(workItem.ToJsonPatchDocument(), ProjectName, workItem.WorkItemType).Result;
+        }
+
+        public WorkItem Update<T>(T workItem) where T : AzureDevOpsWorkItem
+        {
+            var credentials = new VssBasicCredential(string.Empty, PersonalAccessToken);
+
+            var connection = new VssConnection(Uri, credentials);
+            var workItemTrackingHttpClient = connection.GetClient<WorkItemTrackingHttpClient>();
+            
+            return workItemTrackingHttpClient
+                .UpdateWorkItemAsync(workItem.ToJsonPatchDocument(), workItem.Id).Result;
         }
     }
 }

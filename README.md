@@ -5,7 +5,7 @@ This project targets the .NET Framework, not .NET Standard.
 
 ## Install the package from NuGet:
 
-Install-Package AzureDevOpsBoardsCustomWorkItemObjects -pre
+`Install-Package AzureDevOpsBoardsCustomWorkItemObjects -pre`
 
 ## Example use in a .NET Framework project
 

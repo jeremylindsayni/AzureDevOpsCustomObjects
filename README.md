@@ -5,7 +5,11 @@ This project targets the .NET Framework, not .NET Standard.
 
 ## Install the package from NuGet:
 
-`Install-Package AzureDevOpsBoardsCustomWorkItemObjects -pre`
+`
+Install-Package Microsoft.TeamFoundationServer.Client 
+Install-Package Microsoft.VisualStudio.Services.Client 
+Install-Package AzureDevOpsBoardsCustomWorkItemObjects -pre
+`
 
 ## Example use in a .NET Framework project
 
@@ -13,6 +17,8 @@ The code below shows how to add a bug.
 
 ```csharp
 using AzureDevOpsCustomObjects;
+using AzureDevOpsCustomObjects.Enumerations;
+using AzureDevOpsCustomObjects.WorkItems;
 
 namespace ConsoleApp
 {

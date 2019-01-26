@@ -1,8 +1,11 @@
-﻿using AzureDevOpsCustomObjects.Attributes;
+﻿using System.Collections;
+using System.Collections.Generic;
+using AzureDevOpsCustomObjects.Attributes;
 using AzureDevOpsCustomObjects.Enumerations;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System.Linq;
+using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace AzureDevOpsCustomObjects.WorkItems
 {
@@ -40,9 +43,6 @@ namespace AzureDevOpsCustomObjects.WorkItems
         [AzureDevOpsPath("/fields/System.AssignedTo")]
         public string AssignedTo { get; set; }
 
-        [AzureDevOpsPath("/fields/System.History")]
-        public string Comment { get; set; }
-
         [AzureDevOpsPath("/fields/Microsoft.VSTS.Common.Activity")]
         public string Activity { get; set; }
 
@@ -58,9 +58,36 @@ namespace AzureDevOpsCustomObjects.WorkItems
         [AzureDevOpsPath("/fields/Microsoft.VSTS.Scheduling.Effort")]
         public int Effort { get; set; }
 
+        public IList<AzureDevOpsWorkItemComment> Comments { get; set; }
+
+        public IList<AzureDevOpsWorkItemAttachment> Attachments { get; set; }
+
         public void Add(JsonPatchOperation pathOperation)
         {
             _jsonPatchDocument.Add(pathOperation);
+        }
+
+        public void Remove(string field)
+        {
+            foreach (var patchOperation in _jsonPatchDocument)
+            {
+                if (patchOperation.Path != field) continue;
+                _jsonPatchDocument.Remove(patchOperation);
+                break;
+            }
+        }
+
+        public void AddOrReplace(string field, string value)
+        {
+            Remove(field);
+
+            _jsonPatchDocument.Add(
+                new JsonPatchOperation
+                {
+                    Path = field,
+                    Value = value
+                }
+            );
         }
 
         public JsonPatchDocument ToJsonPatchDocument()

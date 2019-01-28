@@ -32,6 +32,7 @@ namespace AzureDevOpsCustomObjects.Attributes
                 return propertyInfo.GetValue(parentObject);
 
             var enumValue = propertyInfo.GetValue(parentObject) as Enum;
+
             return enumValue.GetDescription();
         }
     }

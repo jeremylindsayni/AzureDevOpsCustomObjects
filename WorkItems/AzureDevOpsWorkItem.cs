@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AzureDevOpsCustomObjects.Attributes;
 using AzureDevOpsCustomObjects.Enumerations;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System.Linq;
-using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace AzureDevOpsCustomObjects.WorkItems
 {
@@ -56,7 +54,7 @@ namespace AzureDevOpsCustomObjects.WorkItems
         public string Tag { get; set; }
 
         [AzureDevOpsPath("/fields/Microsoft.VSTS.Scheduling.Effort")]
-        public int Effort { get; set; }
+        public double? Effort { get; set; }
 
         public IList<AzureDevOpsWorkItemComment> Comments { get; set; }
 

@@ -8,7 +8,6 @@ namespace AzureDevOpsCustomObjects.Enumerations
         [Description("Epic")] Epic,
         [Description("Feature")] Feature,
         [Description("Impediment")] Impediment,
-        [Description("Issue")] Issue,
         [Description("Product Backlog Item")] ProductBacklogItem,
         [Description("Task")] Task,
         [Description("Test Case")] TestCase

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AzureDevOpsCustomObjects.Attributes;
 using AzureDevOpsCustomObjects.Enumerations;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
-using System.Linq;
 
 namespace AzureDevOpsCustomObjects.WorkItems
 {
@@ -26,11 +27,32 @@ namespace AzureDevOpsCustomObjects.WorkItems
         [AzureDevOpsPath("/fields/System.Title")]
         public string Title { get; set; }
 
-        [AzureDevOpsPath("/fields/System.Description")]
-        public string Description { get; set; }
+        [AzureDevOpsPath("/fields/System.State")]
+        public string State { get; set; }
 
-        [AzureDevOpsPath("/fields/Microsoft.VSTS.TCM.ReproSteps")]
-        public string ReproSteps { get; set; }
+        [AzureDevOpsPath("/fields/System.CreatedDate")]
+        public DateTime CreatedDate { get; set; }
+
+        [AzureDevOpsPath("/fields/System.ChangedDate")]
+        public DateTime ChangedDate { get; set; }
+
+        [AzureDevOpsPath("/fields/System.CreatedBy")]
+        public string CreatedBy { get; set; }
+
+        [AzureDevOpsPath("/fields/System.ChangedBy")]
+        public string ChangedBy { get; set; }
+
+        [AzureDevOpsPath("/fields/System.IterationPath")]
+        public string Iteration { get; set; }
+
+        [AzureDevOpsPath("/fields/System.AreaPath")]
+        public string Area { get; set; }
+
+        [AzureDevOpsPath("/fields/System.TeamProject")]
+        public string ProjectName { get; set; }
+
+        [AzureDevOpsPath("/fields/System.Reason")]
+        public string Reason { get; set; }
 
         [AzureDevOpsPath("/fields/Microsoft.VSTS.Common.Priority")]
         public AzureDevOpsWorkItemPriority Priority { get; set; }
@@ -41,20 +63,8 @@ namespace AzureDevOpsCustomObjects.WorkItems
         [AzureDevOpsPath("/fields/System.AssignedTo")]
         public string AssignedTo { get; set; }
 
-        [AzureDevOpsPath("/fields/Microsoft.VSTS.Common.Activity")]
-        public string Activity { get; set; }
-
-        [AzureDevOpsPath("/fields/Microsoft.VSTS.Common.AcceptanceCriteria")]
-        public string AcceptanceCriteria { get; set; }
-
-        [AzureDevOpsPath("/fields/Microsoft.VSTS.TCM.SystemInfo")]
-        public string SystemInformation { get; set; }
-
         [AzureDevOpsPath("/fields/System.Tags")]
         public string Tag { get; set; }
-
-        [AzureDevOpsPath("/fields/Microsoft.VSTS.Scheduling.Effort")]
-        public double? Effort { get; set; }
 
         public IList<AzureDevOpsWorkItemComment> Comments { get; set; }
 
@@ -75,7 +85,7 @@ namespace AzureDevOpsCustomObjects.WorkItems
             }
         }
 
-        public void AddOrReplace(string field, string value)
+        public void AddOrReplace(string field, object value)
         {
             Remove(field);
 
@@ -94,10 +104,8 @@ namespace AzureDevOpsCustomObjects.WorkItems
                 from property in typeof(AzureDevOpsWorkItem).GetProperties()
                 let attributePath = property.GetFieldPath()
                 where attributePath != null
-
                 let propertyValue = property.GetPropertyValue(this)
                 where propertyValue != null
-
                 select new JsonPatchOperation
                 {
                     Operation = Operation.Add,

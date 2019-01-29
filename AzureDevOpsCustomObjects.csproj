@@ -97,7 +97,6 @@
     <Compile Include="WorkItems\AzureDevOpsImpediment.cs" />
     <Compile Include="WorkItems\AzureDevOpsFeature.cs" />
     <Compile Include="WorkItems\AzureDevOpsEpic.cs" />
-    <Compile Include="WorkItems\AzureDevOpsIssue.cs" />
     <Compile Include="WorkItems\AzureDevOpsTestCase.cs" />
     <Compile Include="WorkItems\AzureDevOpsTask.cs" />
     <Compile Include="WorkItems\AzureDevOpsProductBacklogItem.cs" />

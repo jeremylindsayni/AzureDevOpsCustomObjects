@@ -1,4 +1,5 @@
-﻿using AzureDevOpsCustomObjects.Enumerations;
+﻿using AzureDevOpsCustomObjects.Attributes;
+using AzureDevOpsCustomObjects.Enumerations;
 
 namespace AzureDevOpsCustomObjects.WorkItems
 {
@@ -8,5 +9,9 @@ namespace AzureDevOpsCustomObjects.WorkItems
         {
             DevOpsWorkItemType = AzureDevOpsWorkItemType.Impediment;
         }
+
+        [AzureDevOpsPath("/fields/System.Description")]
+        public string Description { get; set; }
+
     }
 }

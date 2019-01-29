@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AzureDevOpsCustomObjects.Extensions;
 using AzureDevOpsCustomObjects.WorkItems;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
@@ -31,7 +32,7 @@ namespace AzureDevOpsCustomObjects
 
         private string PersonalAccessToken { get; }
 
-        public IEnumerable<WorkItem> ReadAll()
+        public IEnumerable<AzureDevOpsWorkItem> ReadAll()
         {
             var workItemQuery = new Wiql()
             {
@@ -43,11 +44,13 @@ namespace AzureDevOpsCustomObjects
             var workItemQueryResult = WorkItemTrackingHttpClient.QueryByWiqlAsync(workItemQuery).Result;
 
             if (!workItemQueryResult.WorkItems.Any())
-                return new List<WorkItem>();
+                return new List<AzureDevOpsWorkItem>();
 
             var matchingWorkItemIds = workItemQueryResult.WorkItems.Select(item => item.Id).ToArray();
 
-            return WorkItemTrackingHttpClient.GetWorkItemsAsync(ProjectName, matchingWorkItemIds, expand : WorkItemExpand.Relations).Result;
+            var workItems = WorkItemTrackingHttpClient.GetWorkItemsAsync(ProjectName, matchingWorkItemIds, expand : WorkItemExpand.Relations).Result;
+
+            return workItems.Select(item => item.ToAzureDevOpsWorkItem());
         }
     }
 }

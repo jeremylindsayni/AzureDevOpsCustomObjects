@@ -31,10 +31,10 @@ namespace AzureDevOpsCustomObjects.WorkItems
         public string State { get; set; }
 
         [AzureDevOpsPath("/fields/System.CreatedDate")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         [AzureDevOpsPath("/fields/System.ChangedDate")]
-        public DateTime ChangedDate { get; set; }
+        public DateTime? ChangedDate { get; set; }
 
         [AzureDevOpsPath("/fields/System.CreatedBy")]
         public string CreatedBy { get; set; }
@@ -101,7 +101,7 @@ namespace AzureDevOpsCustomObjects.WorkItems
         public JsonPatchDocument ToJsonPatchDocument()
         {
             _jsonPatchDocument.AddRange(
-                from property in typeof(AzureDevOpsWorkItem).GetProperties()
+                from property in this.GetType().GetProperties()
                 let attributePath = property.GetFieldPath()
                 where attributePath != null
                 let propertyValue = property.GetPropertyValue(this)

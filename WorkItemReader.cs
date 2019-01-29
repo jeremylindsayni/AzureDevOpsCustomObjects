@@ -47,7 +47,7 @@ namespace AzureDevOpsCustomObjects
 
             var matchingWorkItemIds = workItemQueryResult.WorkItems.Select(item => item.Id).ToArray();
 
-            return WorkItemTrackingHttpClient.GetWorkItemsAsync(ProjectName, matchingWorkItemIds).Result;
+            return WorkItemTrackingHttpClient.GetWorkItemsAsync(ProjectName, matchingWorkItemIds, expand : WorkItemExpand.Relations).Result;
         }
     }
 }

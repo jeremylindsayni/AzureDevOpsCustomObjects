@@ -14,6 +14,7 @@ This project targets the .NET Framework, not .NET Standard.
 The code below shows how to add a bug.
 
 ```csharp
+using System.Collections.Generic;
 using AzureDevOpsCustomObjects;
 using AzureDevOpsCustomObjects.Enumerations;
 using AzureDevOpsCustomObjects.WorkItems;
@@ -34,20 +35,45 @@ namespace ConsoleApp
             // e.g. from a database, or from parsing a CSV
             var bug = new AzureDevOpsBug
             {
-                Title = "Spelling mistake on the home page",
-                ReproSteps = "Log in, look at the home page - there is a spelling mistake.",
+                Title = "This is the new title",
+                ReproSteps = "Log in.",
                 Priority = AzureDevOpsWorkItemPriority.Medium,
                 Severity = AzureDevOpsWorkItemSeverity.Low,
                 AssignedTo = "Jeremy Lindsay",
-                Comment = "First comment from me",
                 Activity = "Development",
                 AcceptanceCriteria = "This is the acceptance criteria",
                 SystemInformation = "This is the system information",
                 Effort = 13,
-                Tag = "Cosmetic; UI Only"
+                Tag = "Cosmetic; UI Only",
+                Comments = new List<AzureDevOpsWorkItemComment>
+                {
+                    new AzureDevOpsWorkItemComment
+                    {
+                        OrderingId = 1, Text = "New Comment from product owner."
+                    },
+                    new AzureDevOpsWorkItemComment
+                    {
+                        OrderingId = 2, Text = "Another Comment from product owner."
+                    }
+                },
+                Attachments = new List<AzureDevOpsWorkItemAttachment>
+                {
+                    new AzureDevOpsWorkItemAttachment
+                    {
+                        OrderingId = 1,
+                        AttachmentPath = @"C:\Users\jeremy.lindsay\Desktop\TextFile.txt",
+                        Comment = "This is my uploaded text file."
+                    },
+                    new AzureDevOpsWorkItemAttachment
+                    {
+                        OrderingId = 1,
+                        AttachmentPath = @"C:\Users\jeremy.lindsay\Desktop\ImageFile.png",
+                        Comment = "This is my uploaded image file."
+                    }
+                }
             };
 
-            var createdBug = workItemCreator.Create(bug);
+            workItemCreator.Create(bug);
         }
     }
 }

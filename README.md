@@ -66,7 +66,7 @@ namespace ConsoleApp
                     },
                     new AzureDevOpsWorkItemAttachment
                     {
-                        OrderingId = 1,
+                        OrderingId = 2,
                         AttachmentPath = @"C:\Users\jeremy.lindsay\Desktop\ImageFile.png",
                         Comment = "This is my uploaded image file."
                     }

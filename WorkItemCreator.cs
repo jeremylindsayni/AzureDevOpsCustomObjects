@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using AzureDevOpsCustomObjects.Extensions;
 using AzureDevOpsCustomObjects.WorkItems;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
@@ -8,6 +6,9 @@ using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace AzureDevOpsCustomObjects
 {
@@ -43,30 +44,80 @@ namespace AzureDevOpsCustomObjects
             // Add revisions for comments
             foreach (var comment in workItem?.Comments.OrderBy(m => m.OrderingId))
             {
-                workItem.AddOrReplace("/fields/System.History", comment.Text);
-                Update(workItem);
-                workItem.Remove("/fields/System.History");
+                Update(workItem.Id, "/fields/System.History", comment.Text);
             }
 
             foreach (var attachment in workItem?.Attachments.OrderBy(m => m.OrderingId))
-                UploadAttachmentToWorkItem(workItem, attachment);
+            {
+                UploadAttachmentToWorkItem(workItem.Id, attachment);
+            }
 
             return workItem.Id;
         }
 
-        private WorkItem Update<T>(T workItem) where T : AzureDevOpsWorkItem
+        public AzureDevOpsWorkItem Update(int workItemId, JsonPatchDocument patchDocument)
         {
-            return WorkItemTrackingHttpClient.UpdateWorkItemAsync(workItem.ToJsonPatchDocument(), workItem.Id).Result;
+            var updatedWorkItem = WorkItemTrackingHttpClient.UpdateWorkItemAsync(patchDocument, workItemId).Result;
+
+            return updatedWorkItem.ToAzureDevOpsWorkItem();
         }
 
-        private void UploadAttachmentToWorkItem<T>(T workItem, AzureDevOpsWorkItemAttachment attachment)
-            where T : AzureDevOpsWorkItem
+        public AzureDevOpsWorkItem Update(int workItemId, string field, string value)
+        {
+            var patchDocument = new JsonPatchDocument
+            {
+                new JsonPatchOperation {Path = field, Value = value}
+            };
+
+            var updatedWorkItem = WorkItemTrackingHttpClient.UpdateWorkItemAsync(patchDocument, workItemId).Result;
+
+            return updatedWorkItem.ToAzureDevOpsWorkItem();
+        }
+
+        public AzureDevOpsWorkItem UpdateWithParent(int childWorkItemId, int parentWorkItemId)
+        {
+            const string relationText = "/relations/-";
+
+            var patch = new JsonPatchDocument
+            {
+                new JsonPatchOperation
+                {
+                    Operation = Operation.Add,
+                    Path = relationText,
+                    Value = new
+                    {
+                        rel = "System.LinkTypes.Hierarchy-Reverse",
+                        url = this.Uri + "/" + this.ProjectName + "/_apis/wit/workItems/" + parentWorkItemId
+                    }
+                }
+            };
+
+            var updatedWorkItem = WorkItemTrackingHttpClient.UpdateWorkItemAsync(patch, childWorkItemId).Result;
+
+            return updatedWorkItem.ToAzureDevOpsWorkItem();
+        }
+
+        private void UploadAttachmentToWorkItem(int workItemId, AzureDevOpsWorkItemAttachment attachment)
         {
             var uploadedFileReference = UploadAttachment(attachment);
+            
+            const string relationText = "/relations/-";
+            var patch = new JsonPatchDocument
+            {
+                new JsonPatchOperation
+                {
+                    Operation = Operation.Add,
+                    Path = relationText,
+                    Value = new
+                    {
+                        rel = "AttachedFile",
+                        url = uploadedFileReference.Url,
+                        attributes = new {comment = attachment.Comment}
+                    }
+                }
+            };
 
-            PatchWorkItem(workItem, attachment.Comment, uploadedFileReference.Url);
-
-            Update(workItem);
+            Update(workItemId, patch);
         }
 
         private AttachmentReference UploadAttachment(AzureDevOpsWorkItemAttachment attachment)
@@ -82,28 +133,6 @@ namespace AzureDevOpsCustomObjects
             }
 
             return uploadedFile;
-        }
-
-        private static void PatchWorkItem<T>(T workItem, string attachmentComment, string uploadedFileUrl)
-            where T : AzureDevOpsWorkItem
-        {
-            const string relationText = "/relations/-";
-
-            workItem.Remove(relationText);
-            workItem.Add(new JsonPatchOperation
-            {
-                Operation = Operation.Add,
-                Path = relationText,
-                Value = new
-                {
-                    rel = "AttachedFile",
-                    url = uploadedFileUrl,
-                    attributes = new
-                    {
-                        comment = attachmentComment
-                    }
-                }
-            });
         }
     }
 }

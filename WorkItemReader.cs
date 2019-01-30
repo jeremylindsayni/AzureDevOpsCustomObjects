@@ -32,7 +32,7 @@ namespace AzureDevOpsCustomObjects
 
         private string PersonalAccessToken { get; }
 
-        public IEnumerable<AzureDevOpsWorkItem> ReadAll()
+        public IEnumerable<AzureDevOpsWorkItem> All()
         {
             var workItemQuery = new Wiql()
             {

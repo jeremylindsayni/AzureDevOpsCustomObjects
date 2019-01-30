@@ -41,15 +41,21 @@ namespace AzureDevOpsCustomObjects
 
             workItem.Id = createdWorkItem.Id.Value;
 
-            // Add revisions for comments
-            foreach (var comment in workItem?.Comments.OrderBy(m => m.OrderingId))
+            if (workItem?.Comments != null)
             {
-                Update(workItem.Id, "/fields/System.History", comment.Text);
+                // Add revisions for comments
+                foreach (var comment in workItem?.Comments.OrderBy(m => m.OrderingId))
+                {
+                    Update(workItem.Id, "/fields/System.History", comment.Text);
+                }
             }
 
-            foreach (var attachment in workItem?.Attachments.OrderBy(m => m.OrderingId))
+            if (workItem?.Attachments != null)
             {
-                UploadAttachmentToWorkItem(workItem.Id, attachment);
+                foreach (var attachment in workItem?.Attachments.OrderBy(m => m.OrderingId))
+                {
+                    UploadAttachmentToWorkItem(workItem.Id, attachment);
+                }
             }
 
             return workItem.Id;

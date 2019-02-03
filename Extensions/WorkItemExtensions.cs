@@ -85,9 +85,9 @@ namespace AzureDevOpsCustomObjects.Extensions
                 case "Task":
                     azureDevOpsWorkItem = new AzureDevOpsTask();
                     break;
-                case "Test Case":
-                    azureDevOpsWorkItem = new AzureDevOpsTestCase();
-                    break;
+                //case "Test Case":
+                //    azureDevOpsWorkItem = new AzureDevOpsTestCase();
+                //    break;
                 default:
                     throw new Exception("Unknown Work Item Type");
             }

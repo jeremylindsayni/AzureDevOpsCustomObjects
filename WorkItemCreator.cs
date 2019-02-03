@@ -7,12 +7,18 @@ using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Microsoft.TeamFoundation.Client;
 
 namespace AzureDevOpsCustomObjects
 {
-    public class WorkItemCreator
+    public class WorkItemCreator : AbstractWorkItemProcessor
     {
         public WorkItemCreator(string uri, string personalAccessToken, string projectName)
         {
@@ -46,7 +52,7 @@ namespace AzureDevOpsCustomObjects
                 // Add revisions for comments
                 foreach (var comment in workItem?.Comments.OrderBy(m => m.OrderingId))
                 {
-                    Update(workItem.Id, "/fields/System.History", comment.Text);
+                    PatchWithComment(workItem.Id, comment.Text);
                 }
             }
 
@@ -68,7 +74,7 @@ namespace AzureDevOpsCustomObjects
             return updatedWorkItem.ToAzureDevOpsWorkItem();
         }
 
-        public AzureDevOpsWorkItem Update(int workItemId, string field, string value)
+        public AzureDevOpsWorkItem Patch(int workItemId, string field, string value)
         {
             var patchDocument = new JsonPatchDocument
             {
@@ -80,7 +86,22 @@ namespace AzureDevOpsCustomObjects
             return updatedWorkItem.ToAzureDevOpsWorkItem();
         }
 
-        public AzureDevOpsWorkItem UpdateWithParent(int childWorkItemId, int parentWorkItemId)
+        public AzureDevOpsWorkItem PatchWithComment(int workItemId, string comment)
+        {
+            return Patch(workItemId, "/fields/System.History", comment);
+        }
+
+        public AzureDevOpsWorkItem PatchWithStatus(int workItemId, string status)
+        {
+            return Patch(workItemId, "/fields/System.State", status);
+        }
+
+        public AzureDevOpsWorkItem PatchAsDone(int workItemId)
+        {
+            return PatchWithStatus(workItemId, "Done");
+        }
+
+        public AzureDevOpsWorkItem PatchWithParentRelationship(int childWorkItemId, int parentWorkItemId)
         {
             const string relationText = "/relations/-";
 

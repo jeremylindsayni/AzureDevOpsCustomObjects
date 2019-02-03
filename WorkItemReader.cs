@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Services.WebApi;
 
 namespace AzureDevOpsCustomObjects
 {
-    public class WorkItemReader
+    public class WorkItemReader : AbstractWorkItemProcessor
     {
         public WorkItemReader(string uri, string personalAccessToken, string projectName)
         {

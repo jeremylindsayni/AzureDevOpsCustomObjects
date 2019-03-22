@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/samsmithnz/Microsoft/_apis/build/status/samsmithnz.AzureDevOpsCustomObjects?branchName=master)](https://dev.azure.com/samsmithnz/Microsoft/_build/latest?definitionId=48&branchName=master)
+
 # Azure DevOps Custom Objects
 Experimental package to assist with creation of work items in Azure DevOps boards using .NET.
 

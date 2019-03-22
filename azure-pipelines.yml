@@ -10,22 +10,25 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
   BuildVersion: 1.0.$(Build.BuildId)
 
 steps:
 - task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.4.1'
+  inputs:
+    versionSpec: 4.4.1
 
 - task: NuGetCommand@2
   inputs:
-    projects: AzureDevOpsCustomObjects.csproj
+    solution: AzureDevOpsCustomObjects.csproj
 
 - task: VSBuild@1
   inputs:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
-    projects: AzureDevOpsCustomObjects.csproj
+    solution: AzureDevOpsCustomObjects.csproj
     configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2

@@ -1,3 +1,5 @@
+Adapted to use Azure Pipelines, to create a preview version for personal use. Thank you to Jeremy for making such a great module.
+
 [![Build Status](https://dev.azure.com/samsmithnz/Microsoft/_apis/build/status/samsmithnz.AzureDevOpsCustomObjects?branchName=master)](https://dev.azure.com/samsmithnz/Microsoft/_build/latest?definitionId=48&branchName=master)
 
 # Azure DevOps Custom Objects

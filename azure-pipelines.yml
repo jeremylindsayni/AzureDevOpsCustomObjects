@@ -10,25 +10,33 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  BuildVersion: 1.0.$(Build.BuildId)
 
 steps:
 - task: NuGetToolInstaller@0
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    projects: AzureDevOpsCustomObjects.csproj
 
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
+    projects: AzureDevOpsCustomObjects.csproj
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- task: NuGetCommand@2
+  displayName: 'NuGet pack'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: pack
+    packagesToPack: AzureDevOpsCustomObjects.csproj
+    versioningScheme: byEnvVar
+    versionEnvVar: BuildVersion
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'

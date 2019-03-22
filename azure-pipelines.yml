@@ -36,6 +36,7 @@ steps:
   inputs:
     command: pack
     packagesToPack: AzureDevOpsCustomObjects.csproj
+    packDestination: $(Build.ArtifactStagingDirectory)
     versioningScheme: byEnvVar
     versionEnvVar: BuildVersion
 

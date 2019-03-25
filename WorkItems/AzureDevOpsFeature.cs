@@ -27,5 +27,8 @@ namespace AzureDevOpsCustomObjects.WorkItems
 
         [AzureDevOpsPath("/fields/Microsoft.VSTS.Scheduling.Effort")]
         public double? Effort { get; set; }
+
+        [AzureDevOpsPath("/fields/Microsoft.VSTS.Scheduling.TargetDate")]
+        public System.DateTime TargetDate { get; set; }
     }
 }
